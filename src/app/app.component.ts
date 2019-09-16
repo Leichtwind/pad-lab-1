@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HubConnectionBuilder } from '@aspnet/signalr';
-import { HubConnection } from '@aspnet/signalr';
+import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
 
 @Component({
   selector: 'app-root',
@@ -8,13 +7,11 @@ import { HubConnection } from '@aspnet/signalr';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  topic: string;
-
   connection: HubConnection;
   messages: string[] = [];
 
-  message: string;
   isReady: boolean;
+  topic: string;
 
   ngOnInit() {
     this.connection = new HubConnectionBuilder()
@@ -39,11 +36,18 @@ export class AppComponent implements OnInit {
       .catch(console.log);
   }
 
-  onTopicSubmit() {
-    this.connection.send('subscribe', this.topic).catch(console.log);
+  onTopicSubmit(topic: string) {
+    this.isReady = false;
+
+    this.connection.send('subscribe', topic)
+      .then(() => {
+        this.topic = topic;
+        this.isReady = true;
+      })
+      .catch(console.log);
   }
 
-  onMessageSubmit() {
-    this.connection.send('sendMessage', this.message, this.topic).catch(console.log);
+  onMessageSubmit(message: string) {
+    this.connection.send('sendMessage', message, this.topic).catch(console.log);
   }
 }

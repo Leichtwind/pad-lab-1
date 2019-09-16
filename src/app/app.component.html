@@ -4,14 +4,18 @@
     </div>
 
     <label for="topicInput"></label>
-    <input id="topicInput" [(ngModel)]="topic">
+    <input #topicInput id="topicInput">
 
-    <button (click)="onTopicSubmit()" [disabled]="!isReady">Submit</button>
+    <button (click)="onTopicSubmit(topicInput.value)" [disabled]="!isReady">
+        Submit
+    </button>
 </div>
 
 <div>
     <label for="messageInput"></label>
-    <input id="messageInput" [(ngModel)]="message">
+    <input #messageInput id="messageInput">
 
-    <button (click)="onMessageSubmit()">Submit</button>
+    <button (click)="onMessageSubmit(messageInput.value)" [disabled]="!isReady || !topic">
+        Submit
+    </button>
 </div>
